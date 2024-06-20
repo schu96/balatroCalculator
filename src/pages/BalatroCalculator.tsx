@@ -222,17 +222,18 @@ export default function BalatroPage() {
     sessionStorage.setItem("handLevels", JSON.stringify(handLevel));
   }
 
-  const displayClickedCards = () => {
-    if (showClickedCards) {
-      let output : ReactElement[] = [];
-      for (const [key, value] of Object.entries(clickedCard)) {
-        output.push(
-        <Card s={value.suit} val={value.rank} handleCardClick={handleCardClick} id={key} deleteCard={deleteCard}/>)
-      }
-      return output;
-    }
-    return [];
-  }
+  // const displayClickedCards = () => {
+  //   if (showClickedCards) {
+  //     let output : ReactElement[] = [];
+  //     for (const [key, value] of Object.entries(clickedCard)) {
+  //       output.push(
+  //       <Card s={value.suit} val={value.rank} handleCardClick={handleCardClick} id={key} deleteCard={deleteCard}/>)
+  //     }
+  //     return output;
+  //   }
+  //   return [];
+  // }
+
   const createCard = (item : any) => {
     var container = JSON.parse(sessionStorage.getItem(item.s) as string);
     let newContainer : Array<ReactElement> = [];
@@ -296,13 +297,13 @@ export default function BalatroPage() {
     })
   }
 
-  const handleShowClickedCards = () => {
-    if (showClickedCards) {
-      setShowClickedCards(!showClickedCards);
-    } else {
-      setShowClickedCards(!showClickedCards);
-    }
-  }
+  // const handleShowClickedCards = () => {
+  //   if (showClickedCards) {
+  //     setShowClickedCards(!showClickedCards);
+  //   } else {
+  //     setShowClickedCards(!showClickedCards);
+  //   }
+  // }
 
   return (
   <FMLayout>

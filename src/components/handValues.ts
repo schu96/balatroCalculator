@@ -77,3 +77,59 @@ export const displayHandValues = (name : string) : string => {
       throw new Error (`Unable to determine hand type for value : ${name}`);
   }
 }
+type htlcType = {
+  [handValueName : string]: {
+    "changeBase" : number,
+    "changeMult" : number
+  }
+}
+export const htLevelChange : htlcType = {
+  "highcard" : {
+    "changeBase" : 10,
+    "changeMult" : 1
+  },
+  "pair" : {
+    "changeBase" : 15,
+    "changeMult" : 1
+  },
+  "twopair" : {
+    "changeBase" : 20,
+    "changeMult" : 1
+  },
+  "threeofakind" : {
+    "changeBase" : 20,
+    "changeMult" : 2
+  },
+  "flush" : {
+    "changeBase" : 25,
+    "changeMult" : 2
+  },
+  "fullhouse" : {
+    "changeBase": 25,
+    "changeMult": 2
+  },
+  "straight" : {
+    "changeBase" : 30,
+    "changeMult" : 3,
+  },
+  "fourofakind" : {
+    "changeBase" : 30,
+    "changeMult" : 3
+  },
+  "straightflush" : {
+    "changeBase" : 40,
+    "changeMult" : 4
+  },
+  "fiveofakind" : {
+    "changeBase" : 35,
+    "changeMult" : 3
+  },
+  "flushhouse" : {
+    "changeBase" : 40,
+    "changeMult" : 4
+  },
+  "flushfive" : {
+    "changeBase" : 50,
+    "changeMult" : 3
+  }
+}

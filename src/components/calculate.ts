@@ -1,5 +1,5 @@
-import { detectHandValue } from "./detectHandValue.ts";
-import { cardDict } from "@/pages/BalatroCalculator.tsx";
+import { detectHandValue, htLevelChange } from ".";
+import { cardDict, handValueType } from "../pages/BalatroCalculator.tsx";
 
 interface simpleCardDict {
   rank : number,
@@ -12,10 +12,10 @@ interface simpleCardDict {
   playOrder : number
 }
 
-export const calculate = (clickedCard : cardDict, handLevel : {[name : string] : {"mult": number, "base": number}}, balanced : boolean = false, chariots : number = 0) => {
+export const calculate = (clickedCard : cardDict, handLevel : handValueType, balanced : boolean = false, chariots : number = 0, bossBlind : string = "") => {
   let handType = detectHandValue(clickedCard).split(" ").join("").toLowerCase();
   let validCards : simpleCardDict[] = getScoringCards(clickedCard);
-  return calculateMath(validCards, handLevel, handType, balanced, chariots);
+  return calculateMath(validCards, handLevel, handType, balanced, chariots, bossBlind);
 }
 
 export const getScoringCards = (clickedCard : cardDict) => {
@@ -23,19 +23,24 @@ export const getScoringCards = (clickedCard : cardDict) => {
   let scoringCards : Array<simpleCardDict> = [];
 
   if (handType === "highcard") {
-    let highestRank = Object.entries(clickedCard).filter((card) => {
+    let nonTowerCards = Object.entries(clickedCard).filter((card) => {
       return !(card[1].tarot === "Tower");
-    }).reduce((a, b) => a[1].rank > b[1].rank ? a : b);
-
-    for (const [key, value] of Object.entries(clickedCard)) {
-      if (value.tarot === "Tower") {
-        scoringCards.push(value);
-      } else {
-        if (key === highestRank[0]) {
+    })
+    if (nonTowerCards.length === 0) {
+      scoringCards = Object.values(clickedCard);
+    } else {
+      let highestRank = nonTowerCards.reduce((a, b) => a[1].rank > b[1].rank ? a : b);
+      for (const [key, value] of Object.entries(clickedCard)) {
+        if (value.tarot === "Tower") {
           scoringCards.push(value);
+        } else {
+          if (key === highestRank[0]) {
+            scoringCards.push(value);
+          }
         }
       }
     }
+
   }
   else if (handType === "pair" || handType === "twopair") {
     scoringCards = ptfHelper(clickedCard, 2);
@@ -53,29 +58,42 @@ export const getScoringCards = (clickedCard : cardDict) => {
     return scoringCards;
 }
 
-const calculateMath = (validTotal: simpleCardDict[], handLevel : {[name : string] : {"mult" : number, "base" : number}}, handType : string, balanced : boolean, chariots : number) => {
+const calculateMath = (validTotal: simpleCardDict[], handLevel : handValueType, handType : string, balanced : boolean, chariots : number, bossBlind : string) => {
   let chips : number = handLevel[handType].base;
   let mult : number = handLevel[handType].mult;
 
   const playOrderMath = (card : simpleCardDict) => {
-    if (card.tarot === "Tower") {
-      chips += card.bonusChips + 50;
+    if (bossBlindCheck(card, bossBlind)) {
+      if (bossBlind === "The Flint") {
+        chips = Math.round(chips / 2);
+        mult = Math.round(mult / 2);
+      } else if (bossBlind === "The Arm") {
+        let handLevelStore = JSON.parse(sessionStorage.getItem("handLevels") as string);
+        if (handLevelStore[handType].level !== 1) {
+          chips = handLevelStore[handType].chips - htLevelChange[handType]["changeBase"];
+          mult = handLevelStore[handType].mult - htLevelChange[handType]["changeMult"];
+        }
+      }
     } else {
-      chips += card.baseValue + card.bonusChips;
-    }
-    if (card.tarot === "Empress") {
-      mult += 4;
-    } else if (card.tarot === "Justice") {
-      mult *= 2;
-    } else if (card.tarot === "Hierophant") {
-      chips += 50;
-    }
-    if (card.spectral === "Holographic") {
-      mult += 10;
-    } else if (card.spectral === "Foil") {
-      chips += 50;
-    } else if (card.spectral === "Polychrome") {
-      mult *= 1.5;
+      if (card.tarot === "Tower") {
+        chips += card.bonusChips + 50;
+      } else {
+        chips += card.baseValue + card.bonusChips;
+        if (card.tarot === "Empress") {
+          mult += 4;
+        } else if (card.tarot === "Justice") {
+          mult *= 2;
+        } else if (card.tarot === "Hierophant") {
+          chips += 50;
+        }
+      }
+      if (card.spectral === "Holographic") {
+        mult += 10;
+      } else if (card.spectral === "Foil") {
+        chips += 50;
+      } else if (card.spectral === "Polychrome") {
+        mult *= 1.5;
+      }
     }
   }
   for (var card of validTotal) {
@@ -93,11 +111,38 @@ const calculateMath = (validTotal: simpleCardDict[], handLevel : {[name : string
   }
   if (balanced) {
     let avg = (chips + mult) / 2;
-    console.log(avg);
-    return avg * avg;
+    return Math.round(avg * avg);
   }
-  return chips * mult;
+  return Math.round(chips * mult);
 }
+
+export const bossBlindCheck = (card : simpleCardDict, bossBlind : string) => {
+  if (bossBlind === "The Goad") {
+    if (card.suit === "Spades" || card.tarot === "Lovers") {
+      return true;
+    }
+  } else if (bossBlind === "The Heart") {
+    if (card.suit === "Hearts" || card.tarot === "Lovers") {
+      return true;
+    }
+  } else if (bossBlind === "The Club") {
+    if (card.suit === "Clubs" || card.tarot === "Lovers") {
+      return true;
+    }
+  } else if (bossBlind === "The Window") {
+    if (card.suit === "Diamonds" || card.tarot === "Lovers") {
+      return true;
+    }
+  } else if (bossBlind === "The Plant") {
+    if (card.rank > 10 && card.rank !== 14) {
+      return true;
+    }
+  } else if (bossBlind === "The Arm" || bossBlind === "The Flint") {
+    return true;
+  }
+  return false;
+}
+
 
 const ptfHelper = (cc : cardDict, desiredMatches : number) => {
   let ranksPlayed : {[rank : string] : number} = {};

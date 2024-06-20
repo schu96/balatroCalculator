@@ -1,9 +1,6 @@
 import { cardDict } from "../pages/BalatroCalculator";
 // ~/nextjsTest/test-app/src/components -> npx ts-node detectHandValue.ts
 // remember to change tsconfig.json "module" : "esnext" to "module" : "bundler"
-/* Todo
-Need to check if joker that allows for 4 hand straights/flushes are active
-*/
 
 export const detectHandValue = (clickedCard : cardDict) : string => {
   let numCardsPlayed : number = Object.keys(clickedCard).length;
@@ -88,10 +85,6 @@ const pairCheck = (rankDict : {[rank : string] : number}) => {
 }
 
 const straightCheck = (rankDict : {[rank : string] : number}) : boolean => {
-  /* TODO
-  Need to check if Joker that allows for gaps between ranks is active
-  Also need to check if Joker that allows for 4 hand Flush/Straights is active
-  */
   // A = 11, J = 12, Q = 13, K = 14
   if (Object.keys(rankDict).length < 5) {
     return false;

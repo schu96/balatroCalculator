@@ -179,7 +179,6 @@ export default function HandValueDisplay (
   TODO change container colors based on their levels?
   Lv 1 - Slate, Lv 2 - Cerulean/alice blue, Lv 3 - Emerald, Lv 4, 5 - Yellow / Gold, Lv 6 - red, Lv 7+? - purple
   */
-  // another key={$handValueName} added to remove React warnings in console
   return (
     <div className = "bg-purple-600 mb-5 rounded-lg handValueContainer" key={`${handValueName}-container`}>
       <div className = "flex justify-between ml-2 text-sm font-semibold handValueName">

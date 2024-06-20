@@ -334,8 +334,8 @@ export default function Card ( props : cardProps ) {
       <div className="text-lg playingCardRank">
         {displayValue}
       </div>
-      <div className="h-12 w-16 border border-solid border-red-500 cardModifications" tabIndex={1} onClick={handleTOpen}
-      // onBlur={handleCardModBlur}
+      <div className="h-12 w-16 border border-solid border-red-500 rounded cardModifications" tabIndex={1} onClick={handleTOpen}
+      onBlur={handleCardModBlur}
       >
         <div className="text-sm displayBaseValue"> +{bonusBase} </div>
         <div className="text-sm showTarot">🔮 {tarotDisplay} </div>

@@ -1,10 +1,12 @@
 import { clickedCardContext, handValueType } from "../pages/BalatroCalculator";
 import React, { useContext, useState, useEffect } from "react";
-import { detectHandValue, calculate, getScoringCards } from ".";
+import { detectHandValue, calculate, getScoringCards, bossBlindCheck, htLevelChange } from ".";
 
 export default function SelectedHandTab() {
   const {clickedCard, handLevel, setClickedCard} = useContext(clickedCardContext);
   const [hl, setHl] = useState<any>("");
+  const [dropdownSize, setDropdownSize] = useState<number>(1);
+  const [bossBlind, setBossBlind] = useState<string>("None");
   const [chariotHand, setChariotHand] = useState<number>(0);
   const [balancedCalc, setBalancedCalc] = useState<boolean>(false);
 
@@ -15,16 +17,27 @@ export default function SelectedHandTab() {
   }, [clickedCard, handLevel]);
 
   const handLevelDisplay = () : string => {
-    const handName = detectHandValue(clickedCard).toLowerCase().split(" ").join("");
-    let handLevelInfo = JSON.parse(sessionStorage.getItem("handLevels") as string)[handName];
     return `${detectHandValue(clickedCard)} | Lv.${hl.level} ${hl.base} x ${hl.mult}`;
     }
 
   const retrieveHandLevel = () : { base : number, mult : number, level : number } => {
     const handName = detectHandValue(clickedCard).toLowerCase().split(" ").join("");
-    let handLevelInfo = JSON.parse(sessionStorage.getItem("handLevels") as string)[handName];
     return JSON.parse(sessionStorage.getItem("handLevels") as string)[handName]
     }
+
+  const cycleBossBlinds = () => {
+    const bossNames = [
+      "None", "The Goad", "The Heart", "The Club", "The Window",
+      "The Flint", "The Plant", "The Arm",
+    ]
+    return bossNames.map((name : string) => {
+      return (
+        <option className="" key={`boss-${name}`}>
+          {name}
+        </option>
+      )
+    })
+  }
 
   const clickedCardString = () => {
     let output = [];
@@ -71,6 +84,8 @@ export default function SelectedHandTab() {
     let handLevel = retrieveHandLevel();
     let cumulativeBase = handLevel.base;
     let cumulativeMult = handLevel.mult;
+    let theFlintDebuff = false;
+    let theArmDebuff = false;
     let table = (
       <table className="w-full">
         <thead>
@@ -85,23 +100,40 @@ export default function SelectedHandTab() {
         </thead>
         <tbody className="text-center">
           {scoringCards.map((card) => {
-            if (card.tarot === "Tower") {
-              cumulativeBase += 50 + card.bonusChips;
-            } else {
-              cumulativeBase += card.baseValue + card.bonusChips;
+            if (bossBlind === "The Flint" && !theFlintDebuff) {
+              cumulativeBase = Math.round(cumulativeBase / 2);
+              cumulativeMult = Math.round(cumulativeMult / 2);
+              theFlintDebuff = true;
+            } else if (bossBlind === "The Arm" && ! theArmDebuff) {
+              let handLevelStore = JSON.parse(sessionStorage.getItem("handLevels") as string);
+              let handType = detectHandValue(clickedCard).toLowerCase().split(" ").join("");
+              if (handLevelStore[handType].level !== 1) {
+                cumulativeBase = handLevelStore[handType].chips - htLevelChange[handType]["changeBase"
+                ];
+                cumulativeMult = handLevelStore[handType].chips - htLevelChange[handType]["changeMult"];
+                theArmDebuff = true;
+              }
             }
-            if (card.tarot === "Empress") {
-              cumulativeMult += 4;
-            } else if (card.tarot === "Justice") {
-              cumulativeMult *= 2;
+            if (!bossBlindCheck(card, bossBlind)) {
+              if (card.tarot === "Tower") {
+                cumulativeBase += 50 + card.bonusChips;
+              } else {
+                cumulativeBase += card.baseValue + card.bonusChips;
+                if (card.tarot === "Empress") {
+                  cumulativeMult += 4;
+                } else if (card.tarot === "Justice") {
+                  cumulativeMult *= 2;
+                }
+              }
+              if (card.spectral === "Foil") {
+                cumulativeBase += 50;
+              } else if (card.spectral === "Holographic") {
+                cumulativeMult += 10;
+              } else if (card.spectral === "Polychrome"){
+                cumulativeMult *= 1.5;
+              }
             }
-            if (card.spectral === "Foil") {
-              cumulativeBase += 50;
-            } else if (card.spectral === "Holographic") {
-              cumulativeMult += 10;
-            } else if (card.spectral === "Polychrome"){
-              cumulativeMult *= 1.5;
-            }
+
             return (
               <tr>
                 <th scope="row">{convertSuit(card.suit)}{convertRank(card.rank)}{card.tarot === "Tower" ? "🌑" : ""}</th>
@@ -132,7 +164,7 @@ export default function SelectedHandTab() {
         </div>
         {Object.keys(clickedCard).length === 0 ? "" : (
           <div className="basis-1/4 grow handLevelBase">
-            Est. Score: {calculate(clickedCard, JSON.parse(sessionStorage.getItem("handLevels") as string), balancedCalc, chariotHand)}
+            Est. Score: {calculate(clickedCard, handLevel, balancedCalc, chariotHand, bossBlind)}
           </div>
         )}
 
@@ -148,15 +180,24 @@ export default function SelectedHandTab() {
       </div>
       <div className="absolute bottom-[5px]">
         <label htmlFor="chariot">Chariot Cards in Hand: </label>
-        <input className="w-[60px] text-black pl-2" id="chariot" type="number" step={1} defaultValue={0} onChange={(e) => {
-          console.log(e.currentTarget.value);
+        <input className="w-[50px] text-black pl-2" id="chariot" type="number" step={1} defaultValue={0} onChange={(e) => {
           setChariotHand(parseInt(e.currentTarget.value));
-        }}></input>
+        }}/>
 
         <label className="pl-[50px]" htmlFor="balanced">Balanced Calculation </label>
-        <input id="balanced" type="checkbox" defaultChecked={false} onChange={(e) =>{
+        <input id="balanced" type="checkbox" defaultChecked={false} onChange={() =>{
           setBalancedCalc(!balancedCalc)
-        }}></input>
+        }}/>
+
+        <label className="pl-[50px]" htmlFor="bossName">Boss Blind: </label>
+        <select className="w-[125px] text-black pl-1" id="bossName" size={dropdownSize} onFocusCapture={() => setDropdownSize(5)}
+        onBlur={() => {setDropdownSize(1)}} onChange={(e) => {
+          setBossBlind(e.target.value);
+          e.target.blur();
+          setDropdownSize(1);
+        }}>
+          {cycleBossBlinds()}
+        </select>
       </div>
     </div>
   )

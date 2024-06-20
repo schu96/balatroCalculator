@@ -52,15 +52,19 @@ export default function OptionsTab() {
 
   const storageClearTarot = () => {
     sessionStorage.removeItem("tarotStorage");
+    window.location.reload();
   }
 
   const storageClearSeal = () => {
     sessionStorage.removeItem("sealStorage");
+    window.location.reload();
   }
 
   const storageClearSpec = () => {
     sessionStorage.removeItem("specStorage");
+    window.location.reload();
   }
+
   return (
     <div className="my-2 justify-center text-center inline-table">
       <button className="border bg-gray-700 rounded-md border-red-500 mx-2 px-2 py-2 deckContainerSave"
