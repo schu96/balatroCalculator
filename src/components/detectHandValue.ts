@@ -11,24 +11,7 @@ export const detectHandValue = (clickedCard : cardDict) : string => {
     if (value.tarot === "Tower") {
      // Tower cards have no suit and rank during hand value detection
     } else {
-      if (typeof value.rank === 'string') {
-        switch (value.rank) {
-          case "J":
-            ranksPlayed[11] = (ranksPlayed[11] || 0) + 1;
-            break;
-          case "Q":
-            ranksPlayed[12] = (ranksPlayed[12] || 0) + 1;
-            break;
-          case "K":
-            ranksPlayed[13] = (ranksPlayed[13] || 0) + 1;
-            break;
-          case "A":
-            ranksPlayed[14] = (ranksPlayed[14] || 0) + 1;
-            break;
-        }
-      } else {
-        ranksPlayed[value.rank] = (ranksPlayed[value.rank] || 0) + 1;
-      }
+      ranksPlayed[value.rank] = (ranksPlayed[value.rank] || 0) + 1;
       if (value.tarot === 'Lovers') {
         suitsPlayed["Spades"] += 1;
         suitsPlayed["Hearts"] += 1;
@@ -47,7 +30,7 @@ export const detectHandValue = (clickedCard : cardDict) : string => {
         if (sameSuit && pairCheck(ranksPlayed) === "Full House") {
           return "Flush House";
         } else if (sameRank && !sameSuit) {
-          return "Five of A Kind";
+          return "Five of a Kind";
         } else if (sameSuit && straightHand) {
           return "Straight Flush";
         } else if (sameRank && sameSuit) {
@@ -85,23 +68,21 @@ const pairCheck = (rankDict : {[rank : string] : number}) => {
 }
 
 const straightCheck = (rankDict : {[rank : string] : number}) : boolean => {
-  // A = 11, J = 12, Q = 13, K = 14
+  // A = 14, J = 11, Q = 12, K = 13
   if (Object.keys(rankDict).length < 5) {
     return false;
   }
   let ranks = Object.keys(rankDict).map(value => Number(value)).sort((a , b)=> a - b);
-  if (ranks.includes(11) && (!ranks.includes(5) && !ranks.includes(14))) {
-    /*
-    [9, 10, 11, 12, 13] gives a false straight hand, Valid straights using "A"(11) must have either 5 or "K"(14)
-    */
+  if (ranks.includes(14) && (!ranks.includes(5) && !ranks.includes(13))) {
+    // Valid straights using "A"(14) must have either 5 or "K"(11)
     return false;
   }
   let prev = ranks[0];
   for (const i of ranks.slice(1)) {
     if (prev + 1 !== i) {
-      if (prev === 5 && i === 11) {
+      if (prev === 5 && i === 14) {
         // pass
-      } else if (prev === 10 && i === 12) {
+      } else if (prev === 10 && i === 11) {
         // pass
       } else {
         return false;

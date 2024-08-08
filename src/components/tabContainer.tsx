@@ -3,7 +3,7 @@ import React, { useState, useContext } from "react";
 import { SelectedHandTab, OptionsTab } from ".";
 
 export default function TabContainer() {
-  const {clickedCard, setClickedCard, handLevel, handLevelSaveSession, cardSaveSession, mdc, mdcAbandoned, mdcCheckered, clearAllCards} = useContext(clickedCardContext);
+  const {clickedCard, setClickedCard, handLevel, handLevelSaveSession, cardSaveSession, makeDeck, makeDeckAbandoned, makeDeckCheckered, clearAllCards} = useContext(clickedCardContext);
   const [currentTab, setCurrentTab] = useState<string>("clickedCard");
   const [collapse, setCollapse] = useState<boolean>(true);
 
@@ -39,7 +39,7 @@ export default function TabContainer() {
       </button>
     </ol>
     <clickedCardContext.Provider
-      value={{clickedCard, setClickedCard, handLevel, handLevelSaveSession, cardSaveSession, mdc, mdcAbandoned,mdcCheckered, clearAllCards}}>
+      value={{clickedCard, setClickedCard, handLevel, handLevelSaveSession, cardSaveSession, makeDeck, makeDeckAbandoned,makeDeckCheckered, clearAllCards}}>
       {switchTab()}
     </clickedCardContext.Provider>
   </div>

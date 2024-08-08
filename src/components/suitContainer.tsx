@@ -1,4 +1,4 @@
-import { ReactElement, useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 
 export default function SuitContainer (
   {suitName, cards} : {suitName :string, cards : Array<ReactElement>}
@@ -20,9 +20,15 @@ export default function SuitContainer (
       onClick={handleCollapse}>
       v
       </button>
-      <div className={`relative grid grid-cols-[repeat(auto-fill,minmax(80px,0.5fr))] gap-4 ${toggleCollapse ? "collapse" : ""} cardContainer`}
+      <div className={`relative grid grid-cols-[repeat(auto-fill,minmax(80px,0.5fr))] gap-4 ${toggleCollapse ? "collapse" : ""} cardContainer`} key={`${suitName}-cardContainer`}
       >
-        {cards}
+        {cards.map((card, index) => { // suppresses React unique key warning 🙄
+          return (
+            <React.Fragment key={`${index}-card`}>
+              {card}
+            </React.Fragment>
+          )
+        })}
       </div>
     </div>
   )

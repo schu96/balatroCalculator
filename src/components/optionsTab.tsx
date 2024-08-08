@@ -3,7 +3,7 @@ import React, { useState, useContext } from 'react';
 
 export default function OptionsTab() {
   const [openDeckDD, setOpenDeckDD] = useState<boolean> (false);
-  const { cardSaveSession, mdc, mdcAbandoned, mdcCheckered, clearAllCards} = useContext(clickedCardContext);
+  const { cardSaveSession, makeDeck, makeDeckAbandoned, makeDeckCheckered, clearAllCards} = useContext(clickedCardContext);
   const storageClearCards = () => {
     sessionStorage.removeItem("Spades");
     sessionStorage.removeItem("Hearts");
@@ -25,19 +25,19 @@ export default function OptionsTab() {
     clearAllCards();
     switch(e.currentTarget.getAttribute("data-decktype")) {
       case "standard":
-        mdc("Spades");
-        mdc("Hearts");
-        mdc("Clubs");
-        mdc("Diamonds");
+        makeDeck("Spades");
+        makeDeck("Hearts");
+        makeDeck("Clubs");
+        makeDeck("Diamonds");
         break;
       case "checkered":
-        mdcCheckered();
+        makeDeckCheckered();
         break;
       case "abandoned":
-        mdcAbandoned("Spades");
-        mdcAbandoned("Hearts");
-        mdcAbandoned("Clubs");
-        mdcAbandoned("Diamonds");
+        makeDeckAbandoned("Spades");
+        makeDeckAbandoned("Hearts");
+        makeDeckAbandoned("Clubs");
+        makeDeckAbandoned("Diamonds");
         break;
       case "erratic":
         console.log("not implemented yet");

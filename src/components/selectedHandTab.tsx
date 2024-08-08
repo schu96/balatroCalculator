@@ -4,20 +4,20 @@ import { detectHandValue, calculate, getScoringCards, bossBlindCheck, htLevelCha
 
 export default function SelectedHandTab() {
   const {clickedCard, handLevel, setClickedCard} = useContext(clickedCardContext);
-  const [hl, setHl] = useState<any>("");
+  const [handType, sethandType] = useState<any>("");
   const [dropdownSize, setDropdownSize] = useState<number>(1);
   const [bossBlind, setBossBlind] = useState<string>("None");
   const [chariotHand, setChariotHand] = useState<number>(0);
   const [balancedCalc, setBalancedCalc] = useState<boolean>(false);
 
   useEffect(() => {
-    setHl(() => {
+    sethandType(() => {
       return retrieveHandLevel();
     });
   }, [clickedCard, handLevel]);
 
   const handLevelDisplay = () : string => {
-    return `${detectHandValue(clickedCard)} | Lv.${hl.level} ${hl.base} x ${hl.mult}`;
+    return `${detectHandValue(clickedCard)} | Lv.${handType.level} ${handType.base} x ${handType.mult}`;
     }
 
   const retrieveHandLevel = () : { base : number, mult : number, level : number } => {
@@ -67,13 +67,13 @@ export default function SelectedHandTab() {
     if (rank <= 10) {
       return rank.toString();
     } else {
-      if (rank === 11){
+      if (rank === 14){
         return "A";
-      } else if (rank === 12) {
+      } else if (rank === 11) {
         return "J";
-      } else if (rank === 13) {
+      } else if (rank === 12) {
         return "Q";
-      } else if (rank === 14){
+      } else if (rank === 13){
         return "K";
       }
     }
@@ -100,6 +100,7 @@ export default function SelectedHandTab() {
         </thead>
         <tbody className="text-center">
           {scoringCards.map((card) => {
+            let isTower = card.tarot === "Tower"
             if (bossBlind === "The Flint" && !theFlintDebuff) {
               cumulativeBase = Math.round(cumulativeBase / 2);
               cumulativeMult = Math.round(cumulativeMult / 2);
@@ -108,14 +109,15 @@ export default function SelectedHandTab() {
               let handLevelStore = JSON.parse(sessionStorage.getItem("handLevels") as string);
               let handType = detectHandValue(clickedCard).toLowerCase().split(" ").join("");
               if (handLevelStore[handType].level !== 1) {
-                cumulativeBase = handLevelStore[handType].chips - htLevelChange[handType]["changeBase"
-                ];
-                cumulativeMult = handLevelStore[handType].chips - htLevelChange[handType]["changeMult"];
+                cumulativeBase = handLevelStore[handType]["base"] - htLevelChange[handType]["changeBase"];
+                cumulativeMult = handLevelStore[handType]["mult"] - htLevelChange[handType]["changeMult"];
                 theArmDebuff = true;
               }
             }
-            if (!bossBlindCheck(card, bossBlind)) {
-              if (card.tarot === "Tower") {
+            if (bossBlindCheck(card, bossBlind) && !isTower) {
+              // pass
+            } else {
+              if (isTower) {
                 cumulativeBase += 50 + card.bonusChips;
               } else {
                 cumulativeBase += card.baseValue + card.bonusChips;
@@ -133,7 +135,6 @@ export default function SelectedHandTab() {
                 cumulativeMult *= 1.5;
               }
             }
-
             return (
               <tr>
                 <th scope="row">{convertSuit(card.suit)}{convertRank(card.rank)}{card.tarot === "Tower" ? "🌑" : ""}</th>
