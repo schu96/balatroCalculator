@@ -1,8 +1,9 @@
 'use client'
 import React, { useState, useEffect, ReactElement, createContext } from "react";
 import FMLayout from './fmLayout';
-import { Card, Sidebar, SuitContainer, handValues, TabContainer } from '../components/index';
-import AddCard from '../components/addCard';
+import { Card, AddCard, Sidebar, SuitContainer, handValues, TabContainer } from '../components';
+
+export type tarotType = "Magician" | "Empress" | "Hierophant" | "Lovers" | "Chariot" | "Justice" | "Tower" | "Devil" | "" | undefined;
 
 export interface cardDict {
   [id : string] : {
@@ -12,13 +13,13 @@ export interface cardDict {
     displaysuit?: string,
     baseValue : number,
     bonusChips : number,
-    tarot? : string,
+    tarot? : tarotType,
     spectral? : string,
     seal? : string,
     playOrder : number
   }
 }
-// https://paulsebastian.codes/stop-destructuring-component-props-in-typescript
+
 type clickedCardContextType = {
   clickedCard : cardDict,
   setClickedCard : (clickedCard : cardDict) => void,
@@ -26,9 +27,9 @@ type clickedCardContextType = {
   cardSaveSession? : () => void,
   handLevel : handValueType,
   setHandLevel? : (handLevel : handValueType) => void,
-  mdc : (suit : "Spades" | "Hearts" | "Clubs" | "Diamonds") => void,
-  mdcCheckered : () => void,
-  mdcAbandoned : (suit : "Spades" | "Hearts" | "Clubs" | "Diamonds") => void,
+  makeDeck : (suit : "Spades" | "Hearts" | "Clubs" | "Diamonds") => void,
+  makeDeckCheckered : () => void,
+  makeDeckAbandoned : (suit : "Spades" | "Hearts" | "Clubs" | "Diamonds") => void,
   spadeContainer? : Array<ReactElement>,
   setSpadeContainer? : (spadeContainer : Array<ReactElement>) => void,
   heartContainer? : Array<ReactElement>,
@@ -61,17 +62,17 @@ export default function BalatroPage() {
   const [handLevel, setHandLevel] = useState<handValueType> ({});
 
   const CONTAINER_NAMES = ["Spades", "Hearts", "Clubs", "Diamonds", "Wilds"];
-  const mdc = (suit: "Spades" | "Hearts" | "Clubs" | "Diamonds") => {
+  const makeDeck = (suit: "Spades" | "Hearts" | "Clubs" | "Diamonds") => {
     let container : Array<ReactElement> = [];
     for (var rank = 2; rank <= 14; rank++ ) {
       let id = (Math.floor(new Date().valueOf() * Math.random())).toString();
-      if (rank === 11) {
+      if (rank === 14) {
         container.push(<Card s={suit} val={"A"} handleCardClick={handleCardClick} id={id} deleteCard={deleteCard} />)
-      } else if (rank === 12) {
+      } else if (rank === 11) {
         container.push(<Card s={suit} val={"J"} handleCardClick={handleCardClick} id={id} deleteCard={deleteCard} />)
-      } else if (rank === 13) {
+      } else if (rank === 12) {
         container.push(<Card s={suit} val={"Q"} handleCardClick={handleCardClick} id={id} deleteCard={deleteCard} />)
-      } else if (rank === 14) {
+      } else if (rank === 13) {
         container.push(<Card s={suit} val={"K"} handleCardClick={handleCardClick} id={id} deleteCard={deleteCard} />)
       } else {
         container.push(<Card s={suit} val={rank} handleCardClick={handleCardClick} id={id} deleteCard={deleteCard} />)
@@ -89,13 +90,13 @@ export default function BalatroPage() {
     }
   }
 
-  const mdcCheckered = () => {
+  const makeDeckCheckered = () => {
     clearAllCards();
-    mdc("Spades");
-    mdc("Hearts");
+    makeDeck("Spades");
+    makeDeck("Hearts");
   }
 
-  const mdcAbandoned = (suit : "Spades" | "Hearts" | "Clubs" | "Diamonds") => {
+  const makeDeckAbandoned = (suit : "Spades" | "Hearts" | "Clubs" | "Diamonds") => {
     let container : Array<ReactElement> = [];
     for (var rank = 2; rank < 11; rank ++) {
       let id = (Math.floor(new Date().valueOf() * Math.random())).toString();
@@ -125,10 +126,10 @@ export default function BalatroPage() {
     if (Object.keys(sessionStorage).filter((keyName) => {
       return CONTAINER_NAMES.includes(keyName);
       }).length === 0) {
-      mdc("Spades");
-      mdc("Hearts");
-      mdc("Clubs");
-      mdc("Diamonds");
+      makeDeck("Spades");
+      makeDeck("Hearts");
+      makeDeck("Clubs");
+      makeDeck("Diamonds");
     }
     for (const container of CONTAINER_NAMES) {
       if (sessionStorage.getItem(container)) {
@@ -159,7 +160,7 @@ export default function BalatroPage() {
       setHandLevel((prevHandLevels : handValueType) => {
         const temp = Object.assign({}, prevHandLevels);
         for (const [key, value] of Object.entries(handValues)) {
-          temp[key] = {"base" : value.base, "mult" : value.mult, "level": 1};
+          temp[key] = {"base" : value.base, "mult" : value.mult, "level": value.level};
         }
         return temp;
       })
@@ -287,7 +288,7 @@ export default function BalatroPage() {
             baseValue : parseInt(cardButton.getAttribute("data-basevalue") as string),
             bonusChips : parseInt(cardButton.getAttribute("data-bonuschips") as string),
             seal : cardButton.getAttribute("data-seal") as string,
-            tarot : cardButton.getAttribute("data-tarot") as string,
+            tarot : cardButton.getAttribute("data-tarot") as tarotType,
             spectral : cardButton.getAttribute("data-spec") as string,
             playOrder : Object.keys(prevCards).length,
           }
@@ -326,7 +327,7 @@ export default function BalatroPage() {
         </div>
       </div> */}
       <br/>
-      <clickedCardContext.Provider value={{clickedCard, setClickedCard, handLevel, handLevelSaveSession, cardSaveSession, mdc, mdcAbandoned, mdcCheckered, spadeContainer, setSpadeContainer, heartContainer, setHeartContainer, clubContainer, setClubContainer, diamondContainer, setDiamondContainer, clearAllCards}}>
+      <clickedCardContext.Provider value={{clickedCard, setClickedCard, handLevel, handLevelSaveSession, cardSaveSession, makeDeck, makeDeckAbandoned, makeDeckCheckered, spadeContainer, setSpadeContainer, heartContainer, setHeartContainer, clubContainer, setClubContainer, diamondContainer, setDiamondContainer, clearAllCards}}>
         <TabContainer />
       </clickedCardContext.Provider>
   </FMLayout>

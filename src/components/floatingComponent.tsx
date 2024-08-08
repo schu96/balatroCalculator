@@ -1,7 +1,7 @@
 'use client';
 //need to add this line since all components in Next.js are server components by default
 import { useRouter, usePathname } from 'next/navigation';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 export default function FloatingMenu() {
   // const router = useRouter();
@@ -41,6 +41,15 @@ export default function FloatingMenu() {
       window.scroll({ top: 0, behavior: "smooth" });
     }
   }
+
+  function clickJokers() {
+    if (currentPath !== '/JokerTesting') {
+      window.location.replace('/JokerTesting');
+    } else {
+      window.scroll({ top: 0, behavior: "smooth"});
+    }
+  }
+
   function showDropdown() {
     return (
       <ul className={`z-50 w-[150px] h-content absolute top-20 bg-white ${dropdown || pinned ? "block" : "hidden"} dropdownUl`}
@@ -75,6 +84,7 @@ export default function FloatingMenu() {
                 </div>
                 <div className="h-20 flex items-center text-slate-600 cursor-pointer relative z-50 dropDown"
                   // onClick={() => { setPinned(!pinned) }}
+                  // onClick={clickJokers}
                   onMouseEnter={() => { setDropdown(true) }}
                   onMouseLeave={()=> { setDropdown(false) }}>
                   {"Jokers"}

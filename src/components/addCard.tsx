@@ -82,7 +82,6 @@ export default function AddCard ( props : any) {
     e.stopPropagation();
     if (!e.currentTarget.contains(e.relatedTarget)) {
       if (e.target.id !== "addCardRankField") { // needed to prevent unwanted blur interaction when selecting a rank
-        console.log("I am e", e);
         handleCloseAddCard(e);
       }
     }

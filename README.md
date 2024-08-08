@@ -1,4 +1,5 @@
 ## Balatro Calculator
+<img src='./src/assets/calculatorexample.png'>
 
 [Balatro](https://www.playbalatro.com/) is a poker based roguelike game where players must create poker hands to beat a pre-determined score each level. This project is intended to calculate an __ESTIMATED__ final score for a given poker hand since the current, unmodded version of the game does not show the final score until the "Play" button is pressed.
 
@@ -57,12 +58,15 @@ Tarot, Seal, and Bonus Chip modifications are available through a submenu that a
   </tr>
   <tr>
     <td>Seals</td>
+    <td><img src='./src/assets/sealexample.png'></td>
   </tr>
   <tr>
     <td>Spectral Enhancements</td>
+    <td><img src='./src/assets/spectralexample.png'></td>
   </tr>
   <tr>
     <td>Tarot / Bonus Chips</td>
+    <td><img src='./src/assets/tarotbonuschipexample.png'></td>
   </tr>
 </table>
 
@@ -76,7 +80,11 @@ Calculations are performed each time a card has been clicked and will show the h
 Each time a card is clicked it is assigned a ```playOrder``` value to maintain card order. If a clicked card is clicked again, it will be removed from the scoring calculation and update the ```playOrder``` of other clicked cards if necessary.
 
 Played hands can range from 1 to 5 cards, which allows players to potentially add a non-scoring card to their played hand (i.e. a Two Pair hand consisting of ♠K ♠K ♥Q ♣Q ♦2).
-Cards valid for scoring are determined by the hand type returned from the ```detectHandValue``` function, which is used as a parameter for the ```getScoringCards``` function to return a list of cards sorted by ```playOrder```
+Cards valid for scoring are determined by the hand type returned from the ```detectHandValue``` function, which is used as a parameter for the ```getScoringCards``` function to return a list of cards sorted by ```playOrder```.
+
+The difference in score based on play order of a given hand can be seen in the following examples:
+<img src='./src/assets/calculatorexample2a.png'>
+<img src='./src/assets/calculatorexample2b.png'>
 
 The scoring cards are then fed into the ```calculateMath``` function, which pulls the base chip value and multiplier value of the detected poker hand. Scoring goes in the following order:
 1) Card base chips + any bonus chip value
@@ -89,5 +97,6 @@ After completing the scoring order above, the effect of ```Chariot``` cards held
 If the [Plasma Deck](https://balatrogame.fandom.com/wiki/Decks) is used for the current run, a checkbox within the ```Current Hand``` tab can be toggled to change the scoring calculation from standard to balanced.
 
 To apply the effects of a [Boss Blind](https://balatrogame.fandom.com/wiki/Blinds_and_Antes), click on the Boss Blind's name in the dropdown menu.
+<img src='./src/assets/calculatorexample3.png'>
 
 A scoring breakdown is provided to the user showing the cumulative chips and multiplier from each card scored.

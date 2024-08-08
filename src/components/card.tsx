@@ -1,13 +1,13 @@
 import React, { useEffect, useId, useState } from 'react';
 import { BaseValueSubMenu, SealSubMenu, SpectralSubMenu, TarotSubMenu } from './submenus';
-
+import { tarotType } from '@/pages/BalatroCalculator';
 interface cardProps {
   s : string,
   val : number | string,
   handleCardClick : any,
   id? : string | null,
   spectralEnhancement? : string | null | undefined,
-  tarotEnhancement? : string | null | undefined,
+  tarotEnhancement? : tarotType,
   sealType? : string,
   deleteCard : (suit : string, id : string) => void,
 }
@@ -65,13 +65,13 @@ export default function Card ( props : cardProps ) {
     if (typeof val === "number") {
       if (val > 10) {
         switch(val) {
-          case 11:
-            return "A";
-          case 12:
-            return "J";
-          case 13:
-            return "Q";
           case 14:
+            return "A";
+          case 11:
+            return "J";
+          case 12:
+            return "Q";
+          case 13:
             return "K";
         }
       }
@@ -123,8 +123,7 @@ export default function Card ( props : cardProps ) {
       }
     }
     assignDisplaySuit();
-    if (!val) {
-      // Currently needed for empty add card component
+    if (!val) { // Prevents empty card components from being added
       return
     }
     if (typeof(val) === 'number') {
@@ -134,19 +133,19 @@ export default function Card ( props : cardProps ) {
       switch (val) {
         case("A"):
           setScoringValue(11);
-          setRankValue(11);
+          setRankValue(14);
           break;
         case ("J"):
           setScoringValue(10);
-          setRankValue(12);
+          setRankValue(11);
           break;
         case ("Q"):
           setScoringValue(10);
-          setRankValue(13);
+          setRankValue(12);
           break;
         case ("K"):
           setScoringValue(10);
-          setRankValue(14);
+          setRankValue(13);
           break;
         default:
           throw new Error(`The value provided is not valid ${val} ${typeof val}`);
@@ -244,24 +243,23 @@ export default function Card ( props : cardProps ) {
 
   const handleTarotClick = (e : React.MouseEvent) => {
     e.stopPropagation();
-    let adjTarot = e.currentTarget.textContent as string;
-    if (tarot === "Tower") {
-      setIsStoneCard(true);
+    let adjustedTarot = e.currentTarget.textContent as string;
+    if (adjustedTarot === "No Tarot") {
+      setTarot("");
     } else {
-      setIsStoneCard(false);
+      setTarot(adjustedTarot);
     }
-    setTarot(adjTarot);
     setTarotOpen(false);
     setMenu1(false);
-    modifierSessionSave("tarotStorage", adjTarot);
+    modifierSessionSave("tarotStorage", adjustedTarot);
   }
 
   const handleSpecClick = (e : React.MouseEvent) => {
     e.stopPropagation();
-    let adjSpec = e.currentTarget.textContent as string;
-    setSpectral(adjSpec);
+    let adjustedSpec = e.currentTarget.textContent as string;
+    setSpectral(adjustedSpec);
     setSpecOpen(false);
-    modifierSessionSave("specStorage", adjSpec);
+    modifierSessionSave("specStorage", adjustedSpec);
   }
 
   const handleCardModBlur = (e : React.FocusEvent) => {

@@ -1,51 +1,63 @@
 export const handValues = {
   "highcard" : {
     "mult" : 1,
-    "base" : 5
+    "base" : 5,
+    "level": 1
   },
   "pair" : {
     "mult" : 2,
-    "base" : 10
+    "base" : 10,
+    "level" : 1
   },
   "twopair" : {
     "mult" : 2,
-    "base": 20
+    "base": 20,
+    "level": 1
   },
   "threeofakind" : {
     "mult" : 3,
-    "base" : 30
+    "base" : 30,
+    "level": 1
   },
   "straight" : {
     "mult" : 4,
-    "base" : 30
+    "base" : 30,
+    "level": 1
   },
   "flush" : {
     "mult" : 4,
-    "base" : 35
+    "base" : 35,
+    "level": 1
   },
   "fullhouse" : {
     "mult" : 4,
     "base" : 40,
+    "level": 1
   },
   "fourofakind" : {
     "mult" : 4,
-    "base" : 60
+    "base" : 60,
+    "level": 1
   },
   "straightflush" : {
     "mult" : 8,
-    "base" : 100
+    "base" : 100,
+    "level": 1
   },
   "fiveofakind" : {
     "mult" : 12,
-    "base" : 120
+    "base" : 120,
+    "level": 1
   },
   "flushhouse" : {
     "mult" : 14,
-    "base" : 140
+    "base" : 140,
+    "level": 1
   },
   "flushfive" : {
     "mult" : 16,
-    "base" : 160
+    "base" : 160,
+    "level": 1
   }
 }
 
