@@ -4,7 +4,7 @@ export default function SuitContainer (
   {suitName, cards} : {suitName :string, cards : Array<ReactElement>}
 )  {
   const [suit, setSuit] = useState<string> (suitName);
-  const [toggleCollapse, setToggleCollapse] = useState<Boolean> (false);
+  const [toggleCollapse, setToggleCollapse] = useState<boolean> (false);
 
   const handleCollapse = () => {
     setToggleCollapse(!toggleCollapse);

@@ -13,23 +13,23 @@ interface simpleCardDict {
 }
 
 export const calculate = (clickedCard : cardDict, handLevel : handValueType, balanced : boolean = false, chariots : number = 0, bossBlind : string = "") => {
-  let handType = detectHandValue(clickedCard).split(" ").join("").toLowerCase();
-  let validCards : simpleCardDict[] = getScoringCards(clickedCard);
+  const handType = detectHandValue(clickedCard).split(" ").join("").toLowerCase();
+  const validCards : simpleCardDict[] = getScoringCards(clickedCard);
   return calculateMath(validCards, handLevel, handType, balanced, chariots, bossBlind);
 }
 
 export const getScoringCards = (clickedCard : cardDict) => {
-  let handType = detectHandValue(clickedCard).split(" ").join("").toLowerCase();
+  const handType = detectHandValue(clickedCard).split(" ").join("").toLowerCase();
   let scoringCards : Array<simpleCardDict> = [];
 
   if (handType === "highcard") {
-    let nonTowerCards = Object.entries(clickedCard).filter((card) => {
+    const nonTowerCards = Object.entries(clickedCard).filter((card) => {
       return !(card[1].tarot === "Tower");
     })
     if (nonTowerCards.length === 0) {
       scoringCards = Object.values(clickedCard);
     } else {
-      let highestRank = nonTowerCards.reduce((a, b) => a[1].rank > b[1].rank ? a : b);
+      const highestRank = nonTowerCards.reduce((a, b) => a[1].rank > b[1].rank ? a : b);
       for (const [key, value] of Object.entries(clickedCard)) {
         if (value.tarot === "Tower") {
           scoringCards.push(value);
@@ -66,7 +66,7 @@ const calculateMath = (validTotal: simpleCardDict[], handLevel : handValueType, 
     mult = Math.round(mult / 2);
   }
   if (bossBlind === "The Arm") {
-    let handLevelStore = JSON.parse(sessionStorage.getItem("handLevels") as string);
+    const handLevelStore = JSON.parse(sessionStorage.getItem("handLevels") as string);
     if (handLevelStore[handType]["level"] !== 1) {
       chips = handLevelStore[handType]["base"] - htLevelChange[handType]["changeBase"];
       mult = handLevelStore[handType]["mult"] - htLevelChange[handType]["changeMult"];
@@ -74,7 +74,7 @@ const calculateMath = (validTotal: simpleCardDict[], handLevel : handValueType, 
   }
 
   const playOrderMath = (card : simpleCardDict) => {
-    let isTower = card.tarot === "Tower";
+    const isTower = card.tarot === "Tower";
     if (bossBlindCheck(card, bossBlind) && !isTower) {
       return;
     }
@@ -100,7 +100,7 @@ const calculateMath = (validTotal: simpleCardDict[], handLevel : handValueType, 
   }
 
 
-  for (var card of validTotal) {
+  for (const card of validTotal) {
     playOrderMath(card);
     if (card.seal === "Red") {
       playOrderMath(card);
@@ -114,7 +114,7 @@ const calculateMath = (validTotal: simpleCardDict[], handLevel : handValueType, 
     }
   }
   if (balanced) {
-    let avg = (chips + mult) / 2;
+    const avg = (chips + mult) / 2;
     return Math.round(avg * avg);
   }
   return Math.round(chips * mult);
@@ -147,8 +147,8 @@ export const bossBlindCheck = (card : simpleCardDict, bossBlind : string) => {
 
 
 const pairTripleFourHelper = (cc : cardDict, desiredMatches : number) => {
-  let ranksPlayed : {[rank : string] : number} = {};
-  let intermediate = [];
+  const ranksPlayed : {[rank : string] : number} = {};
+  const intermediate = [];
   for (const [_, value] of Object.entries(cc)) {
     if (value.tarot === "Tower") {
       intermediate.push(value);
@@ -156,10 +156,10 @@ const pairTripleFourHelper = (cc : cardDict, desiredMatches : number) => {
       ranksPlayed[value.rank] = (ranksPlayed[value.rank] || 0) + 1;
     }
   }
-  let ranksOfInterest = Object.keys(ranksPlayed).filter((cards) => {
+  const ranksOfInterest = Object.keys(ranksPlayed).filter((cards) => {
     return ranksPlayed[cards] === desiredMatches;
   })
-  let output = Object.values(cc).filter((val) => {
+  const output = Object.values(cc).filter((val) => {
     if (val.tarot === "Tower") {
       return true;
     } else {

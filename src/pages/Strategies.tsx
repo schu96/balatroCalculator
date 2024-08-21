@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 'use client';
 
 import React from 'react';
@@ -30,7 +31,7 @@ export default function StratsPage() {
       <div>
         <br/>
         <p className="px-[50px]">
-          Cards added to the deck should synergize with your Jokers or contain powerful enhancements; drawing a high scoring potential playing card usually doesn't mean much if you hand is filled with useless cards or doesn't benefit from any Joker effects.
+          Cards added to the deck should synergize with your Jokers or contain powerful enhancements; drawing a high scoring potential playing card usually won't mean much if you hand is filled with useless cards or doesn't benefit from any Joker effects.
 
           Playing cards purchased from booster packs can be extremely beneficial to your deck. Cards in the booster pack can potentially come with Spectral, Tarot, or Seal enhancements that can easily be modified to fit your deck's highest scoring hand.
         </p>

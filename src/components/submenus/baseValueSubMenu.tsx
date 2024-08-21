@@ -33,13 +33,13 @@ export default function BaseValueSubMenu(props : bvmProps) {
       </li>
       <li className="inline-flex items-center">
         <input className="w-[25px] h-[25px] text-black m-2 mx-3" value="➖" type="button" id="baseValueDec" onClick={() => {
-            let doc : HTMLFormElement = document.querySelector("#baseValueChange") as HTMLFormElement;
+            const doc : HTMLFormElement = document.querySelector("#baseValueChange") as HTMLFormElement;
             if (doc.value) {
               handleBaseValue(parseInt(doc.value) * -1);
             }
             }}/>
         <input className="w-[25px] h-[25px] text-black m-2 mx-3" value="➕" type="button" id="baseValueInc" onClick={() => {
-          let doc : HTMLFormElement = document.querySelector("#baseValueChange") as HTMLFormElement;
+          const doc : HTMLFormElement = document.querySelector("#baseValueChange") as HTMLFormElement;
           if (doc.value) {
             handleBaseValue(parseInt(doc.value));
           }

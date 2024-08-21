@@ -1,33 +1,33 @@
 import { cardDict } from "@/pages/BalatroCalculator";
 import { calculate, handValues } from "../components";
 // check package.json and remove "type": "module" if module is not defined in ES module scope
-let highCard : cardDict = {
+const highCard : cardDict = {
   "a" : {rank : 14, suit : "Spades", bonusChips : 0, baseValue: 11, playOrder: 0}
 }
-let highCardTower : cardDict = {
+const highCardTower : cardDict = {
   "a" : {rank : 14, suit: "Spades", bonusChips : 0, baseValue: 11, playOrder: 0},
   "b" : {rank : 12, suit: "Hearts", bonusChips : 0, baseValue: 10, tarot : "Tower", playOrder: 1}
 }
-let redSealPair : cardDict = {
+const redSealPair : cardDict = {
   "a" : {rank : 5, suit: "Hearts", bonusChips : 10, baseValue : 5, seal : "Red", playOrder: 0},
   "b" : {rank : 5, suit: "Diamonds", bonusChips : 0, baseValue : 5, playOrder: 1}
 }
 
-let twoPairEmpress : cardDict = {
+const twoPairEmpress : cardDict = {
   "a" : {rank : 2, suit: "Clubs", bonusChips : 0, baseValue : 2, tarot : "Empress", playOrder : 0},
   "b" : {rank : 2, suit: "Spades", bonusChips : 0, baseValue : 2, tarot : "Empress", playOrder : 1},
   "c" : {rank : 3, suit: "Clubs", bonusChips : 0, baseValue : 3, playOrder: 2},
   "d" : {rank : 3, suit: "Diamonds", bonusChips : 0, baseValue : 3, playOrder: 3}
 }
 
-let threeofakind : cardDict = {
+const threeofakind : cardDict = {
   "a" : {rank : 10, suit : "Spades", baseValue: 10, bonusChips : 0, playOrder: 0},
   "aa" : {rank : 10, suit: "Spades", baseValue : 10, bonusChips: 0, tarot: "Tower", playOrder: 1},
   "b" : {rank : 10, suit : "Spades", baseValue : 10, bonusChips: 0, playOrder: 2},
   "c" : {rank : 10 , suit : "Spades", baseValue: 10, bonusChips : 0, playOrder: 3}
 }
 
-let straight : cardDict = {
+const straight : cardDict = {
   "a" : {rank : 2, suit : "Hearts", bonusChips : 0, baseValue : 2, playOrder: 0},
   "b" : {rank : 3, suit : "Spades", bonusChips : 0, baseValue : 3, playOrder: 1},
   "c" : {rank : 4, suit : "Clubs", bonusChips : 0, baseValue : 4, playOrder: 2},
@@ -35,7 +35,7 @@ let straight : cardDict = {
   "e" : {rank : 6, suit : "Clubs", bonusChips : 0, baseValue : 6, playOrder: 4}
 }
 
-let flushV1 : cardDict = {
+const flushV1 : cardDict = {
   "a" : {rank : 2, suit: "Hearts", bonusChips: 0, baseValue: 2, tarot: "Justice", playOrder: 4},
   "b" : {rank : 3, suit: "Hearts", bonusChips: 0, baseValue: 3, playOrder: 1},
   "c" : {rank : 4, suit: "Hearts", bonusChips: 0, baseValue: 4, playOrder: 2},
@@ -43,7 +43,7 @@ let flushV1 : cardDict = {
   "e" : {rank : 8, suit: "Hearts", bonusChips: 0, baseValue: 8, tarot: "Empress", playOrder: 0}
 }
 
-let flushV2 : cardDict = {
+const flushV2 : cardDict = {
   "a" : {rank : 2, suit: "Hearts", bonusChips: 0, baseValue: 2, tarot: "Justice", playOrder: 0},
   "b" : {rank : 3, suit: "Hearts", bonusChips: 0, baseValue: 3, playOrder: 1},
   "c" : {rank : 4, suit: "Hearts", bonusChips: 0, baseValue: 4, playOrder: 2},
@@ -51,11 +51,11 @@ let flushV2 : cardDict = {
   "e" : {rank : 8, suit: "Hearts", bonusChips: 0, baseValue: 8, tarot: "Empress", playOrder: 4}
 }
 
-let polyHighCard : cardDict = {
+const polyHighCard : cardDict = {
   "a" : {rank : 10, suit: "Hearts", bonusChips: 0, baseValue: 10, spectral: "Polychrome", playOrder: 0}
 }
 
-let fullHouse : cardDict = {
+const fullHouse : cardDict = {
   "a": {rank : 13, suit: "Spades", baseValue: 10, bonusChips: 0, playOrder: 0},
   "b" : {rank : 13, suit: "Hearts", baseValue: 10, bonusChips: 0, playOrder: 1},
   "c" : {rank : 13, suit: "Diamonds", baseValue : 10, bonusChips: 0, playOrder: 2},
@@ -83,14 +83,14 @@ test('calculates hand for three of a kind w/ tower card', () => {
 })
 
 test('calculates hand for full house', () => {
-  let fullHouseCalc = calculate(fullHouse, handValues);
+  const fullHouseCalc = calculate(fullHouse, handValues);
   expect(fullHouseCalc).toBe(328);
 })
 
 test('calculates hand order properly', () => {
   // flushV1Calc has an empress card calculated first in the play order
-  let flushV1Calc = calculate(flushV1, handValues);
-  let flushV2Calc = calculate(flushV2, handValues);
+  const flushV1Calc = calculate(flushV1, handValues);
+  const flushV2Calc = calculate(flushV2, handValues);
   expect(flushV1Calc).not.toEqual(flushV2Calc);
   expect(flushV1Calc).toBeGreaterThan(flushV2Calc);
 
@@ -102,6 +102,6 @@ test('calculates card editions', () => {
 })
 
 test('does recalculation for red seal marked cards', () => {
-  let redSealCalculation = calculate(redSealPair, handValues);
+  const redSealCalculation = calculate(redSealPair, handValues);
   expect(redSealCalculation).toEqual(90);
 })

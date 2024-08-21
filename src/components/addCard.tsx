@@ -1,6 +1,10 @@
 import React, { useState } from "react"
+import { createCardInfo } from "@/pages/BalatroCalculator";
+type addCardProps = {
+  createCard : (args: createCardInfo) => void
+}
 
-export default function AddCard ( props : any) {
+export default function AddCard ( props : addCardProps) {
   const { createCard } = props;
   const [addCardMenu, setAddCardMenu] = useState<boolean>(false);
   const [dropdownSize, setDropdownSize] = useState<number>(1);
@@ -65,10 +69,10 @@ export default function AddCard ( props : any) {
     })
   }
   const getFields = () => {
-    let tarot = (document.querySelector("#addCardTarotField") as HTMLFormElement).value;
-    let spectral = (document.querySelector("#addCardSpecField") as HTMLFormElement).value;
-    let seal = (document.querySelector("#addCardSealField") as HTMLFormElement).value;
-    let cardValues = {
+    const tarot = (document.querySelector("#addCardTarotField") as HTMLFormElement).value;
+    const spectral = (document.querySelector("#addCardSpecField") as HTMLFormElement).value;
+    const seal = (document.querySelector("#addCardSealField") as HTMLFormElement).value;
+    const cardValues = {
       rank : (document.querySelector("#addCardRankField") as HTMLFormElement).value,
       s : (document.querySelector("#addCardSuitField") as HTMLFormElement).value,
       tarot : tarot === "No tarot" ? "" : tarot,

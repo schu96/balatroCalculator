@@ -3,9 +3,9 @@ import { cardDict } from "../pages/BalatroCalculator";
 // remember to change tsconfig.json "module" : "esnext" to "module" : "bundler"
 
 export const detectHandValue = (clickedCard : cardDict) : string => {
-  let numCardsPlayed : number = Object.keys(clickedCard).length;
-  let ranksPlayed : {[rank : string] : number} = {};
-  let suitsPlayed : {[suit : string] : number} = {"Spades": 0, "Hearts": 0, "Clubs" : 0, "Diamonds": 0};
+  const numCardsPlayed : number = Object.keys(clickedCard).length;
+  const ranksPlayed : {[rank : string] : number} = {};
+  const suitsPlayed : {[suit : string] : number} = {"Spades": 0, "Hearts": 0, "Clubs" : 0, "Diamonds": 0};
   // let suitsPlayed : {[suit : string] : number} = {"♠" : 0, "♥" : 0, "♣": 0, "♦": 0}
   for (const [_, value] of Object.entries(clickedCard)) {
     if (value.tarot === "Tower") {
@@ -40,6 +40,7 @@ export const detectHandValue = (clickedCard : cardDict) : string => {
         } else if (sameSuit && !sameRank && !straightHand){
           return "Flush";
         }
+        break;
       case 4:
       case 3:
       case 2:
@@ -47,12 +48,13 @@ export const detectHandValue = (clickedCard : cardDict) : string => {
       default:
         return "High Card";
     }
+    return "High Card";
 }
 
 const pairCheck = (rankDict : {[rank : string] : number}) => {
-  let pairArr = Object.values(rankDict).filter((value) => value === 2);
-  let tripletArr = Object.values(rankDict).filter((value) => value === 3);
-  let fourArr = Object.values(rankDict).filter((value) => value === 4);
+  const pairArr = Object.values(rankDict).filter((value) => value === 2);
+  const tripletArr = Object.values(rankDict).filter((value) => value === 3);
+  const fourArr = Object.values(rankDict).filter((value) => value === 4);
   if (pairArr.length === 1 && tripletArr.length === 1) {
     return "Full House";
   } else if (tripletArr.length === 1) {
@@ -72,7 +74,7 @@ const straightCheck = (rankDict : {[rank : string] : number}) : boolean => {
   if (Object.keys(rankDict).length < 5) {
     return false;
   }
-  let ranks = Object.keys(rankDict).map(value => Number(value)).sort((a , b)=> a - b);
+  const ranks = Object.keys(rankDict).map(value => Number(value)).sort((a , b)=> a - b);
   if (ranks.includes(14) && (!ranks.includes(5) && !ranks.includes(13))) {
     // Valid straights using "A"(14) must have either 5 or "K"(11)
     return false;

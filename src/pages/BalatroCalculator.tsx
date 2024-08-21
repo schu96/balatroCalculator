@@ -41,6 +41,20 @@ type clickedCardContextType = {
   clearAllCards : () => void,
 }
 
+type cardStorageInfo = {
+  s : string,
+  val : number,
+  id : string
+}
+
+export type createCardInfo = {
+  rank : string | number,
+  s : string,
+  tarot? : tarotType,
+  spectral? : string,
+  seal? : string
+}
+
 export const clickedCardContext = createContext<clickedCardContextType>({} as clickedCardContextType);
 
 export type handValueType = {
@@ -53,19 +67,21 @@ export type handValueType = {
 }
 
 export default function BalatroPage() {
+  // More preferrable to specify an empty dict object instead of trying to make a placeholder clickedCard state
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   const [clickedCard, setClickedCard] = useState <cardDict | {}> ({});
   const [spadeContainer, setSpadeContainer] = useState <Array<ReactElement>> ([]);
   const [heartContainer, setHeartContainer] = useState <Array<ReactElement>> ([]);
   const [clubContainer, setClubContainer] = useState <Array<ReactElement>> ([]);
   const [diamondContainer, setDiamondContainer] = useState <Array<ReactElement>> ([]);
-  const [showClickedCards, setShowClickedCards] = useState(false);
   const [handLevel, setHandLevel] = useState<handValueType> ({});
 
   const CONTAINER_NAMES = ["Spades", "Hearts", "Clubs", "Diamonds", "Wilds"];
+
   const makeDeck = (suit: "Spades" | "Hearts" | "Clubs" | "Diamonds") => {
-    let container : Array<ReactElement> = [];
-    for (var rank = 2; rank <= 14; rank++ ) {
-      let id = (Math.floor(new Date().valueOf() * Math.random())).toString();
+    const container : Array<ReactElement> = [];
+    for (let rank = 2; rank <= 14; rank++ ) {
+      const id = (Math.floor(new Date().valueOf() * Math.random())).toString();
       if (rank === 14) {
         container.push(<Card s={suit} val={"A"} handleCardClick={handleCardClick} id={id} deleteCard={deleteCard} />)
       } else if (rank === 11) {
@@ -97,12 +113,12 @@ export default function BalatroPage() {
   }
 
   const makeDeckAbandoned = (suit : "Spades" | "Hearts" | "Clubs" | "Diamonds") => {
-    let container : Array<ReactElement> = [];
-    for (var rank = 2; rank < 11; rank ++) {
-      let id = (Math.floor(new Date().valueOf() * Math.random())).toString();
+    const container : Array<ReactElement> = [];
+    for (let rank = 2; rank < 11; rank ++) {
+      const id = (Math.floor(new Date().valueOf() * Math.random())).toString();
       container.push(<Card s={suit} val={rank} handleCardClick={handleCardClick} id={id} deleteCard={deleteCard} />)
     }
-    let aceId = (Math.floor(new Date().valueOf() * Math.random())).toString();
+    const aceId = (Math.floor(new Date().valueOf() * Math.random())).toString();
     container.push(<Card s={suit} val={"A"} handleCardClick={handleCardClick} id={aceId} deleteCard={deleteCard}/>)
     container.push(<AddCard createCard={createCard} />);
     if (suit === "Spades") {
@@ -115,6 +131,7 @@ export default function BalatroPage() {
       setDiamondContainer(container);
     }
   }
+
   const clearAllCards = () => {
     setSpadeContainer([]);
     setHeartContainer([]);
@@ -177,15 +194,15 @@ export default function BalatroPage() {
   }, [handLevel])
 
   const deleteCard = (suit : string, id : string) => {
-    let container = JSON.parse(sessionStorage.getItem(suit) as string);
-    let temp = container.filter((cardObject : any) => {
+    const container = JSON.parse(sessionStorage.getItem(suit) as string);
+    const temp = container.filter((cardObject : cardStorageInfo) => {
       return cardObject["id"] !== id;
     });
     if (!temp) {
       throw new Error(`Unable to find valid container: ${suit}`)
     }
-    let newContainer : Array<ReactElement> = [];
-    for (var obj of temp) {
+    const newContainer : Array<ReactElement> = [];
+    for (const obj of temp) {
       newContainer.push(<Card s={obj.s} val={obj.val} handleCardClick={handleCardClick} id={obj.id} deleteCard={deleteCard}/>)
     }
     newContainer.push(<AddCard createCard={createCard} />)
@@ -223,29 +240,20 @@ export default function BalatroPage() {
     sessionStorage.setItem("handLevels", JSON.stringify(handLevel));
   }
 
-  // const displayClickedCards = () => {
-  //   if (showClickedCards) {
-  //     let output : ReactElement[] = [];
-  //     for (const [key, value] of Object.entries(clickedCard)) {
-  //       output.push(
-  //       <Card s={value.suit} val={value.rank} handleCardClick={handleCardClick} id={key} deleteCard={deleteCard}/>)
-  //     }
-  //     return output;
-  //   }
-  //   return [];
-  // }
-
-  const createCard = (item : any) => {
-    var container = JSON.parse(sessionStorage.getItem(item.s) as string);
-    let newContainer : Array<ReactElement> = [];
+  const createCard = (item : createCardInfo) => {
+    let container = JSON.parse(sessionStorage.getItem(item.s) as string);
+    if (!isNaN(parseInt(container.rank))) {
+      container.rank = parseInt(container.rank)
+    }
+    const newContainer : Array<ReactElement> = [];
     if (!container) {
       container = {};
     } else {
-      for (var obj of container) {
+      for (const obj of container) {
         newContainer.push(<Card s={obj.s} val={obj.val} handleCardClick={handleCardClick} id={obj.id} deleteCard={deleteCard} />);
       }
     }
-    let id = (Math.floor(new Date().valueOf() * Math.random())).toString();
+    const id = (Math.floor(new Date().valueOf() * Math.random())).toString();
     newContainer.push(<Card s={item.s} val={item.rank} handleCardClick={handleCardClick} deleteCard={deleteCard} tarotEnhancement={item.tarot} spectralEnhancement={item.spectral} sealType={item.seal} id={id} />);
     newContainer.push(<AddCard createCard={createCard} />);
     if (item.s === "Spades") {
@@ -268,7 +276,7 @@ export default function BalatroPage() {
     setClickedCard((prevCards : cardDict) => {
       const temp = Object.assign({}, prevCards);
       if (temp[unique]) {
-        let oopsOrder = temp[unique].playOrder as number;
+        const oopsOrder = temp[unique].playOrder as number;
         delete temp[unique];
         for (const card of Object.values(temp)) {
           if (card.playOrder as number> oopsOrder) {

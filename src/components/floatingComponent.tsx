@@ -1,6 +1,6 @@
 'use client';
 //need to add this line since all components in Next.js are server components by default
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import React, { useState } from 'react';
 
 export default function FloatingMenu() {
@@ -42,13 +42,13 @@ export default function FloatingMenu() {
     }
   }
 
-  function clickJokers() {
-    if (currentPath !== '/JokerTesting') {
-      window.location.replace('/JokerTesting');
-    } else {
-      window.scroll({ top: 0, behavior: "smooth"});
-    }
-  }
+  // function clickJokers() {
+  //   if (currentPath !== '/JokerTesting') {
+  //     window.location.replace('/JokerTesting');
+  //   } else {
+  //     window.scroll({ top: 0, behavior: "smooth"});
+  //   }
+  // }
 
   function showDropdown() {
     return (
@@ -56,7 +56,7 @@ export default function FloatingMenu() {
       onMouseEnter={() => {setChildDropdown(true)}}
       onMouseLeave={() => {setChildDropdown(false)}}>
         <p className="z-100 pb-3 break-words">Coming Soon!™</p>
-        <p className="z-100 pb-3 break-words">They're hard to code</p>
+        <p className="z-100 pb-3 break-words">They are hard to code</p>
         <p className="z-100 pb-3 break-words">Send help</p>
       </ul>
     )

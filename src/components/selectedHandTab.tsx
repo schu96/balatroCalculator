@@ -1,10 +1,16 @@
-import { clickedCardContext, handValueType } from "../pages/BalatroCalculator";
+import { clickedCardContext} from "../pages/BalatroCalculator";
 import React, { useContext, useState, useEffect } from "react";
 import { detectHandValue, calculate, getScoringCards, bossBlindCheck, htLevelChange } from ".";
 
+type handTypeValue = {
+  base : string | number,
+  mult : string | number,
+  level: string | number
+}
+
 export default function SelectedHandTab() {
   const {clickedCard, handLevel, setClickedCard} = useContext(clickedCardContext);
-  const [handType, sethandType] = useState<any>("");
+  const [handType, sethandType] = useState<handTypeValue>({"base" : "", "mult" : "", "level" : ""});
   const [dropdownSize, setDropdownSize] = useState<number>(1);
   const [bossBlind, setBossBlind] = useState<string>("None");
   const [chariotHand, setChariotHand] = useState<number>(0);
@@ -40,7 +46,7 @@ export default function SelectedHandTab() {
   }
 
   const clickedCardString = () => {
-    let output = [];
+    const output = [];
     for (const [_, value] of Object.entries(clickedCard)) {
       if (value.tarot === "Tower") {
         output.push("Stone Card");
@@ -80,13 +86,13 @@ export default function SelectedHandTab() {
     throw new Error(`Unknown rank detected in convertRank: ${rank}`);
   }
   const scoringBreakdown = () => {
-    let scoringCards = getScoringCards(clickedCard);
-    let handLevel = retrieveHandLevel();
+    const scoringCards = getScoringCards(clickedCard);
+    const handLevel = retrieveHandLevel();
     let cumulativeBase = handLevel.base;
     let cumulativeMult = handLevel.mult;
     let theFlintDebuff = false;
     let theArmDebuff = false;
-    let table = (
+    const table = (
       <table className="w-full">
         <thead>
           <tr>
@@ -100,14 +106,14 @@ export default function SelectedHandTab() {
         </thead>
         <tbody className="text-center">
           {scoringCards.map((card) => {
-            let isTower = card.tarot === "Tower"
+            const isTower = card.tarot === "Tower"
             if (bossBlind === "The Flint" && !theFlintDebuff) {
               cumulativeBase = Math.round(cumulativeBase / 2);
               cumulativeMult = Math.round(cumulativeMult / 2);
               theFlintDebuff = true;
             } else if (bossBlind === "The Arm" && ! theArmDebuff) {
-              let handLevelStore = JSON.parse(sessionStorage.getItem("handLevels") as string);
-              let handType = detectHandValue(clickedCard).toLowerCase().split(" ").join("");
+              const handLevelStore = JSON.parse(sessionStorage.getItem("handLevels") as string);
+              const handType = detectHandValue(clickedCard).toLowerCase().split(" ").join("");
               if (handLevelStore[handType].level !== 1) {
                 cumulativeBase = handLevelStore[handType]["base"] - htLevelChange[handType]["changeBase"];
                 cumulativeMult = handLevelStore[handType]["mult"] - htLevelChange[handType]["changeMult"];

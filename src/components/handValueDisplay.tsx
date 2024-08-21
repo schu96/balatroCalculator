@@ -9,7 +9,7 @@ export default function HandValueDisplay (
 ) {
   const incrementHandValue = () : void => {
     const values = Object.assign({}, handValues) as handValueType;
-    let temp : handValueContents  = {"base" : 1, "mult" : 1, "level" : 1};
+    const temp : handValueContents  = {"base" : 1, "mult" : 1, "level" : 1};
     switch(handValueName) {
       case "highcard" : {
         temp["base"] = values[handValueName]["base"] + 10;
@@ -93,7 +93,7 @@ export default function HandValueDisplay (
       return;
     }
     const values = Object.assign({}, handValues) as handValueType;
-    let temp : handValueContents = {"base" : 1, "mult" : 1, "level" : 1};
+    const temp : handValueContents = {"base" : 1, "mult" : 1, "level" : 1};
     switch(handValueName) {
       case "highcard" : {
         temp["base"] = values[handValueName]["base"] - 10;

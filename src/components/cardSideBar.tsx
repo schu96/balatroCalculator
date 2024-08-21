@@ -1,6 +1,6 @@
-import React, {useContext , useState} from 'react';
-import {cardDict, handValueType} from '../pages/BalatroCalculator';
-import {HandValueDisplay, handValues} from './index';
+import React  from 'react';
+import {handValueType} from '../pages/BalatroCalculator';
+import {HandValueDisplay} from './index';
 
 interface SidebarProps {
   handValues : Record<string, unknown> | handValueType;
@@ -15,9 +15,9 @@ export type handValueContents = {
 export default function Sidebar(
 {handValues, setHandLevel} : SidebarProps
   ) {
-  let output = [];
+  const output = [];
   for (const [key, value] of Object.entries(handValues)) {
-    let v = value as handValueContents;
+    const v = value as handValueContents;
     if (v) {
         output.push(HandValueDisplay(key, v.level, v.base, v.mult, handValues, setHandLevel));
       }

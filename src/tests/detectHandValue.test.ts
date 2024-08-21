@@ -1,11 +1,11 @@
 import { cardDict } from "@/pages/BalatroCalculator";
 import { detectHandValue } from "../components/detectHandValue";
 
-let highCard : cardDict = {
+const highCard : cardDict = {
   "a" : {"rank" : 11, "suit": "Spades", bonusChips : 0, baseValue : 10, playOrder: 0}
 }
 
-let highCardFull : cardDict = {
+const highCardFull : cardDict = {
   "a" : {"rank" : 11, "suit" : "Spades", bonusChips : 0, baseValue : 10, playOrder: 0},
   "b" : {"rank": 12, "suit" : "Diamonds", bonusChips : 0, baseValue : 10, playOrder: 1},
   "c" : {"rank" : 4, "suit" : "Clubs", bonusChips : 0, baseValue : 4, playOrder: 2},
@@ -13,14 +13,14 @@ let highCardFull : cardDict = {
   "e" : {"rank" : 3, "suit" : "Clubs", bonusChips : 0, baseValue : 3, playOrder: 4},
 }
 
-let pair : cardDict = {
+const pair : cardDict = {
   "a" : {"rank" : 11, "suit" : "Spades", bonusChips : 0, baseValue : 10, playOrder: 0},
   "b" : {"rank" : 11, "suit" : "Spades", bonusChips : 0, baseValue : 10, playOrder: 1},
   "c" : {"rank" : 12, "suit" : "Hearts", bonusChips : 0, baseValue : 10, playOrder: 2},
   "d" : {"rank" : 13, "suit" : "Hearts", bonusChips : 0, baseValue : 10, playOrder: 3},
 }
 
-let twoPair : cardDict = {
+const twoPair : cardDict = {
   "a" : {"rank" : 11, "suit" : "Spades", bonusChips : 0, baseValue : 10, playOrder: 0},
   "b" : {"rank" : 11, "suit" : "Spades", bonusChips : 0, baseValue : 10, playOrder: 1},
   "c" : {"rank" : 12, "suit" : "Hearts", bonusChips : 0, baseValue : 10, playOrder: 2},
@@ -28,13 +28,13 @@ let twoPair : cardDict = {
   "e" : {"rank" : 13, "suit" : "Hearts", bonusChips : 0, baseValue : 10, playOrder: 4},
 }
 
-let threeofaKind : cardDict = {
+const threeofaKind : cardDict = {
   "a" : {"rank" : 11, "suit": "Spades", bonusChips : 0, baseValue : 10, playOrder: 0},
   "b" : {"rank" : 11, "suit" : "Clubs", bonusChips : 0, baseValue : 10, playOrder: 1},
   "c" : {"rank" : 11, "suit" : "Diamonds", bonusChips : 0, baseValue : 10, playOrder: 2},
 }
 
-let threeofaKindjunk : cardDict = {
+const threeofaKindjunk : cardDict = {
   "a" : {"rank" : 11, "suit": "Spades", bonusChips : 0, baseValue : 10, playOrder: 0},
   "b" : {"rank" : 11, "suit" : "Clubs", bonusChips : 0, baseValue : 10, playOrder: 1},
   "c" : {"rank" : 11, "suit" : "Diamonds", bonusChips : 0, baseValue : 10, playOrder: 2},
@@ -42,7 +42,7 @@ let threeofaKindjunk : cardDict = {
   "e" : {"rank" : 2, "suit" : "Clubs", bonusChips : 0, baseValue : 2, playOrder: 4},
 }
 
-let straight : cardDict = {
+const straight : cardDict = {
   "a" : {"rank" : 2, "suit": "Spades", bonusChips : 0, baseValue : 2, playOrder: 0},
   "b" : {"rank" : 3, "suit": "Hearts", bonusChips : 0, baseValue : 3, playOrder: 1},
   "c" : {"rank" : 4, "suit" : "Clubs", bonusChips : 0, baseValue : 4, playOrder: 2},
@@ -50,7 +50,7 @@ let straight : cardDict = {
   "e" : {"rank" : 6, "suit" : "Spades", bonusChips : 0, baseValue : 6, playOrder: 4}
 }
 
-let straightFail : cardDict = {
+const straightFail : cardDict = {
   "a" : {"rank" : 3, "suit": "Spades", bonusChips : 0, baseValue : 3, playOrder: 1},
   "b" : {"rank" : 5, "suit": "Hearts", bonusChips : 0, baseValue : 5, playOrder: 2},
   "c" : {"rank" : 7, "suit" : "Clubs", bonusChips : 0, baseValue : 7, playOrder: 3},
@@ -58,7 +58,7 @@ let straightFail : cardDict = {
   "e" : {"rank" : 11, "suit" : "Spades", bonusChips : 0, baseValue : 10, playOrder: 5}
 }
 
-let straightAcetoFive : cardDict = {
+const straightAcetoFive : cardDict = {
   "a" : {"rank" : 14, "suit" : "Tower", bonusChips : 0, baseValue : 10, playOrder: 0},
   "b" : {"rank" : 2, "suit" : "Diamonds", bonusChips : 0, baseValue : 2, playOrder: 1},
   "c" : {"rank" : 3, "suit" : "Spades", bonusChips : 0, baseValue : 3, playOrder: 2},
@@ -66,7 +66,7 @@ let straightAcetoFive : cardDict = {
   "e" : {"rank" : 4, "suit" : "Clubs", bonusChips : 0, baseValue : 4, playOrder: 4}
 }
 
-let flush : cardDict = {
+const flush : cardDict = {
   "a" : {"rank" : 11, "suit" : "Club", tarot: "Lovers", bonusChips : 0, baseValue : 10, playOrder: 0},
   "b" : {"rank" : 12, "suit" : "Hearts", bonusChips : 0, baseValue : 10, playOrder: 1},
   "c" : {"rank" : 2, "suit" : "Club", tarot : "Lovers", bonusChips : 0, baseValue : 2, playOrder: 2},
@@ -74,7 +74,7 @@ let flush : cardDict = {
   "e" : {"rank" : 2, "suit" : "Hearts", bonusChips : 0, baseValue : 2, playOrder: 4},
 }
 
-let fullhouse : cardDict = {
+const fullhouse : cardDict = {
   "a" : {"rank" : 10, "suit" : "Spades", bonusChips : 0, baseValue : 10, playOrder: 0},
   "b" : {"rank" : 10, "suit" : "Hearts", bonusChips : 0, baseValue : 10, playOrder: 1},
   "c" : {"rank" : 9 , "suit" : "Spades", bonusChips : 0, baseValue : 9, playOrder: 2},
@@ -82,7 +82,7 @@ let fullhouse : cardDict = {
   "e" : {"rank" : 9, "suit" : "Hearts", bonusChips : 0, baseValue : 9, playOrder: 4}
 }
 
-let fourofakind : cardDict = {
+const fourofakind : cardDict = {
   "a" : {"rank" : 11, "suit" : "Spades", bonusChips : 0, baseValue : 10, playOrder: 0},
   "b" : {"rank" : 11, "suit" : "Hearts", bonusChips : 0, baseValue : 10, playOrder: 1},
   "c" : {"rank" : 11, "suit" : "Clubs", bonusChips : 0, baseValue : 10, playOrder: 2},
@@ -91,7 +91,7 @@ let fourofakind : cardDict = {
 }
 
 
-let flushFive : cardDict = {
+const flushFive : cardDict = {
   "a": {"rank": 11, "suit" : "Clubs", bonusChips : 0, baseValue : 10, playOrder: 0},
   "b": {"rank": 11, "suit" : "Clubs", bonusChips : 0, baseValue : 10, playOrder: 1},
   "c": {"rank": 11, "suit" : "Clubs", bonusChips : 0, baseValue : 10, playOrder: 2},
@@ -99,7 +99,7 @@ let flushFive : cardDict = {
   "e": {"rank": 11, "suit" : "Clubs", bonusChips : 0, baseValue : 10, playOrder: 4}
 }
 
-let straightFlush : cardDict = {
+const straightFlush : cardDict = {
   "a": {"rank": 11, "suit" : "Clubs", bonusChips : 0, baseValue : 10, playOrder: 0},
   "b": {"rank": 12, "suit" : "Clubs", bonusChips : 0, baseValue : 10, playOrder: 1},
   "c": {"rank": 13, "suit" : "Clubs", bonusChips : 0, baseValue : 10, playOrder: 2},
@@ -107,7 +107,7 @@ let straightFlush : cardDict = {
   "e": {"rank": 10, "suit" : "Clubs", bonusChips : 0, baseValue : 10, playOrder: 4}
 }
 
-let fiveofakind : cardDict = {
+const fiveofakind : cardDict = {
   "a" : {"rank" : 11, "suit" : "Spades", bonusChips : 0, baseValue : 10, playOrder: 0},
   "b" : {"rank" : 11, "suit" : "Hearts", bonusChips : 0, baseValue : 10, playOrder: 1},
   "c" : {"rank" : 11, "suit" : "Clubs", bonusChips : 0, baseValue : 10, playOrder: 2},

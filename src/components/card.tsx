@@ -4,7 +4,7 @@ import { tarotType } from '@/pages/BalatroCalculator';
 interface cardProps {
   s : string,
   val : number | string,
-  handleCardClick : any,
+  handleCardClick : (e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => void,
   id? : string | null,
   spectralEnhancement? : string | null | undefined,
   tarotEnhancement? : tarotType,
@@ -99,25 +99,25 @@ export default function Card ( props : cardProps ) {
 
   useEffect(() => {
     if (sessionStorage.getItem("sealStorage")) {
-      let sealStorage = JSON.parse(sessionStorage.getItem("sealStorage") as string);
+      const sealStorage = JSON.parse(sessionStorage.getItem("sealStorage") as string);
       if (sealStorage[unique as string]) {
         setSeal(sealStorage[unique as string]);
       }
     }
     if (sessionStorage.getItem("tarotStorage")) {
-      let tarotStorage = JSON.parse(sessionStorage.getItem("tarotStorage") as string);
+      const tarotStorage = JSON.parse(sessionStorage.getItem("tarotStorage") as string);
       if (tarotStorage[unique as string]) {
         setTarot(tarotStorage[unique as string]);
       }
     }
     if (sessionStorage.getItem("specStorage")) {
-      let specStorage = JSON.parse(sessionStorage.getItem("specStorage") as string);
+      const specStorage = JSON.parse(sessionStorage.getItem("specStorage") as string);
       if (specStorage[unique as string]) {
         setSpectral(specStorage[unique as string]);
       }
     }
     if (sessionStorage.getItem("bonusChips")) {
-      let bonusStorage = JSON.parse(sessionStorage.getItem("bonusChips") as string);
+      const bonusStorage = JSON.parse(sessionStorage.getItem("bonusChips") as string);
       if (bonusStorage[unique as string]) {
         setBonusBase(bonusStorage[unique as string]);
       }
@@ -147,8 +147,8 @@ export default function Card ( props : cardProps ) {
           setScoringValue(10);
           setRankValue(13);
           break;
-        default:
-          throw new Error(`The value provided is not valid ${val} ${typeof val}`);
+        // default:
+        //   throw new Error(`The value provided is not valid ${val} ${typeof val}`);
       }
     }
   }, [])
@@ -182,7 +182,7 @@ export default function Card ( props : cardProps ) {
 
   const modifierSessionSave = (storageName : string, variant : string) => {
     if (sessionStorage.getItem(storageName)) {
-      let temp = JSON.parse(sessionStorage.getItem(storageName) as string);
+      const temp = JSON.parse(sessionStorage.getItem(storageName) as string);
       temp[unique as string] = variant;
       sessionStorage.setItem(storageName, JSON.stringify(temp));
     } else {
@@ -204,7 +204,7 @@ export default function Card ( props : cardProps ) {
   }
 
   const handleBaseValue = (baseChange : number) => {
-    let temp = bonusBase + baseChange <= 0 ? 0 : bonusBase + baseChange;
+    const temp = bonusBase + baseChange <= 0 ? 0 : bonusBase + baseChange;
     setBonusBase(temp);
     modifierSessionSave("bonusChips", temp.toString());
   }
@@ -243,7 +243,7 @@ export default function Card ( props : cardProps ) {
 
   const handleTarotClick = (e : React.MouseEvent) => {
     e.stopPropagation();
-    let adjustedTarot = e.currentTarget.textContent as string;
+    const adjustedTarot = e.currentTarget.textContent as string;
     if (adjustedTarot === "No Tarot") {
       setTarot("");
     } else {
@@ -256,7 +256,7 @@ export default function Card ( props : cardProps ) {
 
   const handleSpecClick = (e : React.MouseEvent) => {
     e.stopPropagation();
-    let adjustedSpec = e.currentTarget.textContent as string;
+    const adjustedSpec = e.currentTarget.textContent as string;
     setSpectral(adjustedSpec);
     setSpecOpen(false);
     modifierSessionSave("specStorage", adjustedSpec);
